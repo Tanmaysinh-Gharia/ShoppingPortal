@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using ShoppingPortal.Services.ProductServices;
 using ShoppingPortal.Services.CartServices;
 using ShoppingPortal.Services.OrderServices;
+using ShoppingPortal.Services.AdminServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,12 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile<UserProfile>();
     cfg.AddProfile<ProductProfile>();
     cfg.AddProfile<CartProfile>();
+
+    //Admin Profiles
+    cfg.AddProfile<AdminProfile>();
+    cfg.AddProfile<ProductProfile>();
+    cfg.AddProfile<CategoryProfile>();
+    cfg.AddProfile<AdminViewModelProfile>();
 });
 
 
@@ -41,6 +48,12 @@ builder.Services.AddSession(options =>
 });
 
 // Services
+
+builder.Services.AddLogging();
+
+
+builder.Services.AddSingleton<CountryService>();
+
 builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IUserService, UserService>();
@@ -48,6 +61,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICartService, CartService>();
 
 builder.Services.AddScoped<IOrderService, OrderService>();
+
+builder.Services.AddScoped<IAdminService, AdminService>();
+
+
 
 var app = builder.Build();
 app.UseSession();

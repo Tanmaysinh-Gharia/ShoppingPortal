@@ -25,6 +25,10 @@ namespace ShoppingPortal.Services.Profiles
 
             // Category to CategoryDto mapping
             CreateMap<Category, CategoryDto>();
+
+
+            CreateMap<ProductDto, Product>()
+                .ForMember(dest => dest.ProductCategories, opt => opt.Ignore());
         }
     }
 }

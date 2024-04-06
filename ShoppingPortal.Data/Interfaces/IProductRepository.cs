@@ -25,5 +25,9 @@ namespace ShoppingPortal.Data.Interfaces
                 bool? inStock = null);
 
         Task<List<Category>> GetCategoriesAsync();
+
+        Task<int> GetProductCountAsync();
+
+        Task<Product> GetByIdNoTrackingAsync(Guid productId);
     }
 }

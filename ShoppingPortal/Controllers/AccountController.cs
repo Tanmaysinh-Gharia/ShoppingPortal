@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShoppingPortal.Core.DTOs;
 using ShoppingPortal.Core.Interfaces;
 using ShoppingPortal.Core.DTOs;
+using ShoppingPortal.Services.UserServices;
 
 namespace ShoppingPortal.Web.Controllers
 {
@@ -15,9 +16,13 @@ namespace ShoppingPortal.Web.Controllers
     {
         private readonly IUserService _userService;
 
-        public AccountController(IUserService userService)
+        private readonly CountryService _countryService;
+
+        public AccountController(IUserService userService, CountryService countryService)
         {
             _userService = userService;
+
+            _countryService = countryService;
         }
 
         #region LOG IN
@@ -97,6 +102,18 @@ namespace ShoppingPortal.Web.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
         }
+        #endregion
+
+        #region SIGN UP
+        [HttpGet]
+        public IActionResult Signup()
+        {
+
+            ViewData["HideNavbar"] = true;
+            ViewBag.Countries = _countryService.GetCountryStates().Keys.ToList();
+            return View();
+        }
+
         #endregion
     }
 }

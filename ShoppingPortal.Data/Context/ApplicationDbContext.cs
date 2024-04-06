@@ -28,6 +28,8 @@ namespace ShoppingPortal.Data.Context
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
 
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+
         //Applying Configurations
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

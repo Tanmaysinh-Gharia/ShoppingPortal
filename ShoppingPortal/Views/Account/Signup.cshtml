@@ -1,0 +1,90 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model ShoppingPortal.Web.Models.SignupViewModel
+@{
+    ViewData["Title"] = "Signup Page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5" style="padding-bottom:150px">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow p-4">
+                    <h2 class="text-center mb-4">Register</h2>
+                    <form asp-action="Signup" method="post">
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input id="sEmail" asp-for="Email" class="form-control" placeholder="Enter your email" required>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FirstName" class="form-label"></label>
+                            <input id="sFirstName" asp-for="FirstName" class="form-control" placeholder="Enter your Firstname" required>
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="LastName" class="form-label"></label>
+                            <input id="sLastName" asp-for="LastName" class="form-control" placeholder="Enter your LastName" required>
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Mob" class="form-label">Mob</label>
+                            <input id="sMob" asp-for="Mob" class="form-control" placeholder="Enter your Mobile Number" required>
+                            <span asp-validation-for="Mob" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Country"></label>
+                            <select id="sCountry" asp-for="Country" class="form-control" required>
+                                <option value="">Select Country</option>
+                                @foreach (var country in ViewBag.Countries)
+                                {
+                                    <option value="@country">@country</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div>
+                            <label asp-for="State"></label>
+                            <select id="sState" asp-for="State" class="form-control" required>
+                                <option value="">Select State</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">Password</label>
+                            <input id="sPassword" asp-for="Password" type="password" class="form-control" placeholder="Enter your password" required>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <label asp-for="ConfirmPassword"></label>
+                            <input id="sConfPassword" asp-for="ConfirmPassword" type="password" class="form-control" required />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <div class="d-grid" style="padding-top:20px">
+                            <button type="submit" id="signup" class="btn btn-success">SignUp</button>
+                        </div>
+                    </form>
+                    <center>
+                        <div class="mb-3" style="padding-top:20px">
+                            Already Have an Account ? <a class="text-dark" asp-area="" asp-controller="Account" asp-action="Login"> Click Here to Login</a>
+                        </div>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

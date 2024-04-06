@@ -39,15 +39,12 @@
                                     🛒 Cart
                                     </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" style="justify-content:right; margin-left:auto;">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">📦 Orders </a>
                             </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">👤 Profile</a>
-                            </li>
 
-                            <li class="nav-item" style="justify-content:right; margin-left:auto;">
+                            <li class="nav-item" style="justify-content:right;">
                                 <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
                                     <button type="submit" class="nav-link btn btn-outline-danger btn-link text-red ms-auto">
                                         <i class="bi bi-box-arrow-right"></i>&nbsp; Logout

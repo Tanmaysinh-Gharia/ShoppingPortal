@@ -27,7 +27,7 @@ namespace ShoppingPortal.Data.Interfaces
         Task<bool> CancelOrderTransactionAsync(Guid orderId, OrderStatusEnum newStatus);
 
 
-        
+        Task<int> GetOrderCountAsync();
 
     }
 }

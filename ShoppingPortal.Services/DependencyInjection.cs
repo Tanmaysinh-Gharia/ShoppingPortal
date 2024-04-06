@@ -22,6 +22,7 @@ namespace ShoppingPortal.Services
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
 
         }
 

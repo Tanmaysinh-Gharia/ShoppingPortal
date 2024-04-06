@@ -16,7 +16,7 @@ namespace ShoppingPortal.Core.DTOs
         public int StockQuantity { get; set; }
 
         public List<CategoryDto> Categories { get; set; } = new();
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         // Additional properties for cart functionality
 

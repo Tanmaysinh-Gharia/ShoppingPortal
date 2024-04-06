@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShoppingPortal.Data.Context;
 
@@ -11,9 +12,11 @@ using ShoppingPortal.Data.Context;
 namespace ShoppingPortal.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250406102724_addedProductCategory")]
+    partial class addedProductCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -587,20 +590,6 @@ namespace ShoppingPortal.Data.Migrations
                             Email = "tanmaysinh.gharia@gmail.com",
                             Firstname = "Tanmaysinh",
                             IsActive = false,
-                            Lastname = "Gharia",
-                            PasswordHash = "uZJw2fIyuqgeaiT5vTKJP2LrFFHHDTVNJqpSpKFOsoA=",
-                            PhoneNumber = "1234567890",
-                            PostalCode = "380051",
-                            StreetAddress = "JV Park",
-                            UserType = "Customer"
-                        },
-                        new
-                        {
-                            UserId = new Guid("b1c3d4e5-2345-6789-0123-bcdef1234567"),
-                            CreatedAt = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "tanmay.sinh@gmail.com",
-                            Firstname = "Tanmaysinh",
-                            IsActive = true,
                             Lastname = "Gharia",
                             PasswordHash = "uZJw2fIyuqgeaiT5vTKJP2LrFFHHDTVNJqpSpKFOsoA=",
                             PhoneNumber = "1234567890",

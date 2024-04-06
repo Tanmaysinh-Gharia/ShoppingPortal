@@ -44,6 +44,49 @@ namespace ShoppingPortal.Data.Seeds
                     UserType = UserTypeEnum.Customer,
                     StreetAddress = "456 Customer Ave",
                     PostalCode = "380051"
+                },
+                new User
+                {
+                    UserId = Guid.Parse("a2c3d4e5-2345-6789-0123-bcdef1234567"),
+                    Email = "tanmaysinh.gharia@gmail.com",
+                    PasswordHash = PasswordHasher.HashPassword("Tanmaysinh@123"),
+                    Firstname = "Tanmaysinh",
+                    Lastname = "Gharia",
+                    PhoneNumber = "1234567890",
+                    CreatedAt = new DateTime(2025, 2, 2), // Static date
+                    IsActive = false,
+                    UserType = UserTypeEnum.Customer,
+                    StreetAddress = "JV Park",
+                    PostalCode = "380051"
+                },
+                new User
+                {
+                    UserId = Guid.Parse("b1c3d4e5-2345-6789-0123-bcdef1234567"),
+                    Email = "tanmay.sinh@gmail.com",
+                    PasswordHash = PasswordHasher.HashPassword("Tanmaysinh@123"),
+                    Firstname = "Tanmaysinh",
+                    Lastname = "Gharia",
+                    PhoneNumber = "1234567890",
+                    CreatedAt = new DateTime(2025, 2, 2), // Static date
+                    IsActive = true,
+                    UserType = UserTypeEnum.Customer,
+                    StreetAddress = "JV Park",
+                    PostalCode = "380051"
+                },
+
+                new User
+                {
+                    UserId = Guid.Parse("d2c3d4e5-2345-6789-0123-bcdef1234567"),
+                    Email = "boom.baam@gmail.com",
+                    PasswordHash = PasswordHasher.HashPassword("BoomBaam@123"),
+                    Firstname = "Boom",
+                    Lastname = "Baam",
+                    PhoneNumber = "1234562890",
+                    CreatedAt = new DateTime(2025, 2, 1), // Static date
+                    IsActive = false,
+                    UserType = UserTypeEnum.Customer,
+                    StreetAddress = "JV Park",
+                    PostalCode = "380051"
                 }
         };
     }

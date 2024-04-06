@@ -8,7 +8,9 @@ namespace ShoppingPortal.Core.DTOs
 {
     public class CategoryDto
     {
-        public Guid CategoryId { get; set; }
-        public string Name { get; set; }
+        public Guid CategoryId { get; set; } = Guid.Empty;
+        public string Name { get; set; } = null;
+
+        public string Description { get; set; }
     }
 }

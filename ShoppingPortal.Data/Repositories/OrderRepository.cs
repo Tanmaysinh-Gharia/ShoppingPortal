@@ -97,5 +97,10 @@ namespace ShoppingPortal.Data.Repositories
         }
 
 
+        public async Task<int> GetOrderCountAsync()
+        {
+            int count  = await _context.Orders.CountAsync();
+            return count;
+        }
     }
 }

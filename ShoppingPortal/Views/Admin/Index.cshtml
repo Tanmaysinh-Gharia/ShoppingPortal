@@ -1,0 +1,98 @@
+﻿@model ShoppingPortal.Core.DTOs.Admin.AdminDashboardDto
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Dashboard Overview</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <button id="refreshDashboard" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-arrow-clockwise"></i> Refresh
+        </button>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <!-- Categories Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-primary h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Categories</h6>
+                        <h2 class="mb-0">@Model.CategoryCount</h2>
+                    </div>
+                    <i class="bi bi-tags fs-1"></i>
+                </div>
+            </div>
+            <a asp-action="Categories" class="stretched-link"></a>
+        </div>
+    </div>
+
+    <!-- Products Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-success h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Products</h6>
+                        <h2 class="mb-0">@Model.ProductCount</h2>
+                    </div>
+                    <i class="bi bi-box-seam fs-1"></i>
+                </div>
+            </div>
+            <a asp-action="Products" class="stretched-link"></a>
+        </div>
+    </div>
+
+    <!-- Orders Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-info h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Orders</h6>
+                        <h2 class="mb-0">@Model.OrderCount</h2>
+                    </div>
+                    <i class="bi bi-receipt fs-1"></i>
+                </div>
+            </div>
+            <a asp-action="Orders" class="stretched-link"></a>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-activity me-2"></i>Recent Activity
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="list-group">
+            @foreach (var activity in Model.RecentActivities)
+            {
+                <div class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">
+                            <i class="bi @activity.IconClass me-2"></i>@activity.Type
+                        </h6>
+                        <small class="text-muted" data-timestamp="@activity.Timestamp.ToString("o")"></small>
+                    </div>
+                    <p class="mb-1">@activity.Description</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // This will be moved to admin.js
+            AdminDashboard.init();
+        });
+    </script>
+}

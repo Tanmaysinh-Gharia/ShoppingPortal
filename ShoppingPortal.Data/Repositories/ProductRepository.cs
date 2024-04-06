@@ -43,6 +43,15 @@ namespace ShoppingPortal.Data.Repositories
         public async Task<Product> GetByIdAsync(Guid productId)
         {
             return await _context.Products
+                .Include(p => p.ProductCategories)
+                    .ThenInclude(pc => pc.Category)
+                .FirstOrDefaultAsync(p => p.ProductId == productId);
+        }
+
+        public async Task<Product> GetByIdNoTrackingAsync(Guid productId)
+        {
+            return await _context.Products
+                .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.ProductId == productId);
         }
 
@@ -127,6 +136,12 @@ namespace ShoppingPortal.Data.Repositories
         {
             var categories = await _context.Categories.ToListAsync();
             return categories;
+        }
+
+        public async Task<int> GetProductCountAsync()
+        {
+            int count = await _context.Products.CountAsync();
+            return count;
         }
     }
 }
