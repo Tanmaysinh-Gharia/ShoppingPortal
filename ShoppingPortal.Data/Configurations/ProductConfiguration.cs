@@ -33,8 +33,6 @@ namespace ShoppingPortal.Data.Configurations
             builder.Property(p => p.StockQuantity)
                 .IsRequired();
 
-            builder.Property(p => p.ImageUrl)
-                .HasMaxLength(255);
 
             builder.Property(p => p.CreatedAt)
                 .IsRequired()

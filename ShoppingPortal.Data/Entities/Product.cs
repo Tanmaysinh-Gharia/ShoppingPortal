@@ -38,9 +38,6 @@ namespace ShoppingPortal.Data.Entities
         [ForeignKey("CreatedByUser")]
         public Guid CreatedBy { get; set; }
 
-        [StringLength(255)]
-        public string ImageUrl { get; set; }
-
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

@@ -25,7 +25,6 @@ namespace ShoppingPortal.Data.Seeds
                     StockQuantity = 100,
                     CategoryId = Guid.Parse("d4e5f6a7-4567-8910-1234-56789abcdef1"), // Electronics
                     CreatedBy = Guid.Parse("a1b2c3d4-1234-5678-9012-abcdef123456"), // Admin
-                    ImageUrl = "images/products/smartphone-x.jpg",
                     CreatedAt = new DateTime(2023, 3, 1)
                 },
                 new Product
@@ -38,7 +37,6 @@ namespace ShoppingPortal.Data.Seeds
                     StockQuantity = 50,
                     CategoryId = Guid.Parse("d4e5f6a7-4567-8910-1234-56789abcdef1"), // Electronics
                     CreatedBy = Guid.Parse("a1b2c3d4-1234-5678-9012-abcdef123456"), // Admin
-                    ImageUrl = "images/products/headphones.jpg",
                     CreatedAt = new DateTime(2023, 3, 5)
                 },
                 new Product
@@ -51,7 +49,6 @@ namespace ShoppingPortal.Data.Seeds
                     StockQuantity = 200,
                     CategoryId = Guid.Parse("e5f6a7b8-5678-9101-2345-6789abcdef12"), // Clothing
                     CreatedBy = Guid.Parse("a1b2c3d4-1234-5678-9012-abcdef123456"), // Admin
-                    ImageUrl = "images/products/tshirt.jpg",
                     CreatedAt = new DateTime(2023, 3, 10)
                 }
             };

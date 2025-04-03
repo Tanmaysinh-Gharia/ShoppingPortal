@@ -75,8 +75,17 @@ namespace ShoppingPortal.Web.Controllers
                 return Redirect(returnUrl);
             }
 
-            return RedirectToAction("Index", "Home");
+            switch (loginrole.Role)
+            {
+                case "Admin":
+                    return RedirectToAction("Index", "Admin");
 
+                case "Customer":
+                    return RedirectToAction("Index", "Product");
+
+                default:
+                    return RedirectToAction("Index", "Home");
+            }
         }
 
         #endregion

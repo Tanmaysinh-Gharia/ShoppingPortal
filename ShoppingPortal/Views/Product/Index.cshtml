@@ -1,0 +1,72 @@
+﻿@using ShoppingPortal.Web.Models
+@using ShoppingPortal.Core.DTOs
+@model ProductListViewModel
+@{
+    ViewData["Title"] = "Product Catalog";
+}
+
+<div class="container">
+    <h1>Our Products</h1>
+
+    <div id="product-container" class="row">
+        @foreach (var product in Model.Products)
+        {
+            <partial name="_ProductCards" model="product" />
+        }
+    </div>
+
+    @if (Model.PagingInfo.TotalPages > 1)
+    {
+        <div class="text-center mt-3">
+            <button id="load-more" class="btn btn-primary"
+                    data-current-page="1"
+                    data-total-pages="@Model.PagingInfo.TotalPages">
+                Load More
+            </button>
+        </div>
+    }
+</div>
+@section Scripts {
+    <script>
+        // Initialize Intersection Observer
+            const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (!img.src || img.src.includes("placeholders")) {
+                        img.src = img.dataset.src; // Load image from data-src
+                    }
+                    img.style.opacity = "1"; // Make image visible
+                    imageObserver.unobserve(img);
+                }
+            });
+        }, { rootMargin: '200px' });
+
+        // Observe all lazy-loaded images
+                document.querySelectorAll('.lazy-load').forEach(img => {
+            imageObserver.observe(img);
+        });
+
+        // Load more products handler
+        document.getElementById('load-more')?.addEventListener('click', async function() {
+            const nextPage = parseInt(this.dataset.currentPage) + 1;
+            const response = await fetch(`/Product/LoadMore?page=${nextPage}`);
+            const html = await response.text();
+
+            // Append new products
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            document.getElementById('product-container').appendChild(tempDiv);
+
+            // Observe new images
+            tempDiv.querySelectorAll('.lazy-load').forEach(img => {
+                imageObserver.observe(img);
+            });
+
+            this.dataset.currentPage = nextPage;
+            if (nextPage >= parseInt(this.dataset.totalPages)) {
+                this.remove();
+            }
+        });
+    </script>
+}

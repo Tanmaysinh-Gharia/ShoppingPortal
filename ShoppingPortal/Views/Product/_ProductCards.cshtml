@@ -1,0 +1,27 @@
+﻿@using ShoppingPortal.Core.DTOs
+@model ProductDto
+
+<div class="col-md-4 mb-4">
+    <div class="card h-100">
+        <!-- Updated Image Container -->
+        <div class="image-container"
+             style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f8f9fa;">
+            <img data-src="@Model.ImageUrl"
+                 class="lazy-load"
+                 loading="lazy"
+                 style="opacity: 0; transition: opacity 0.3s ease-in-out; width: 80%; height: 100%; object-fit: contain;"
+                 onload="this.style.opacity=1;"
+                 onerror="this.src='@ViewData["DefaultImage"]'">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">@Model.Name</h5>
+            <p class="text-muted mb-2">@Model.Description</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="h5 text-primary">@Model.Price.ToString("C")</span>
+                <span class="badge bg-@(Model.StockQuantity > 0 ? "success" : "danger")">
+                    @(Model.StockQuantity > 0 ? "In Stock" : "Out of Stock")
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

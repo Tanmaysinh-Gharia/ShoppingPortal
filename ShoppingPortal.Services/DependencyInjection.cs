@@ -5,6 +5,7 @@ using ShoppingPortal.Core.Interfaces;
 using ShoppingPortal.Data.Context;
 using ShoppingPortal.Data.Interfaces;
 using ShoppingPortal.Data.Repositories;
+using ShoppingPortal.Services.ProductServices;
 using ShoppingPortal.Services.UserServices;
 
 namespace ShoppingPortal.Services
@@ -16,10 +17,11 @@ namespace ShoppingPortal.Services
             services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnection")));
 
+            // Add this in your service configuration section
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
 
-
-            services.AddScoped<IUserService, UserService>();
         }
 
     }

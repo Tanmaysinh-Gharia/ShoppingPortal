@@ -15,7 +15,6 @@ namespace ShoppingPortal.Controllers
             _logger = logger;
         }
 
-        [Authorize(Roles = "Customer")]
         public IActionResult Index()
         {
             return View();
