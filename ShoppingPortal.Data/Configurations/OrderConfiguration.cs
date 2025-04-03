@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ShoppingPortal.Core.Enums;
 using ShoppingPortal.Data.Entities;
 namespace ShoppingPortal.Data.Configurations
 {
@@ -17,7 +18,9 @@ namespace ShoppingPortal.Data.Configurations
             builder.Property(o => o.Status)
                 .IsRequired()
                 .HasMaxLength(20)
-                .HasDefaultValue("Pending");
+                .HasDefaultValue(OrderStatusEnum.Pending)
+                .HasSentinel(OrderStatusEnum.Pending)
+                .HasConversion<string>();
 
             builder.Property(o => o.TotalAmount)
                 .IsRequired()

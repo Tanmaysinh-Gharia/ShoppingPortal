@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShoppingPortal.Services.User
+namespace ShoppingPortal.Core.Enums
 {
-    public interface IUserService
+    public enum UserTypeEnum
     {
+        Customer = 1,
+        Admin = 2
     }
 }

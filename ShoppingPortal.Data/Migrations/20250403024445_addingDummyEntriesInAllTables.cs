@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ShoppingPortal.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class addingDummyEntriesInAllTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,7 +31,8 @@ namespace ShoppingPortal.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Firstname = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Lastname = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
@@ -241,6 +244,82 @@ namespace ShoppingPortal.Data.Migrations
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Addresses",
+                columns: new[] { "PostalCode", "City", "State" },
+                values: new object[,]
+                {
+                    { "380051", "Ahmedabad", "Gujarat" },
+                    { "382481", "Ahmedabad", "Gujarat" },
+                    { "393120", "Bharuch", "Gujarat" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "UserId", "CreatedAt", "Email", "Firstname", "IsActive", "Lastname", "PasswordHash", "PhoneNumber", "PostalCode", "StreetAddress", "UpdatedAt", "UserType" },
+                values: new object[,]
+                {
+                    { new Guid("a1b2c3d4-1234-5678-9012-abcdef123456"), new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@shoppingportal.com", "Admin", true, "User", "6G94qKPK8LYNjnTllCqm2G3BUM08AzOK7yW30tfjrMc=", "1234567890", "393120", "123 Admin Street", null, "Admin" },
+                    { new Guid("b2c3d4e5-2345-6789-0123-bcdef1234567"), new DateTime(2023, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "john.doe@example.com", "John", true, "Doe", "ZlKyJQ6uc/cQ0FZNsH/AqjoLvXeATZrliDoFdEMm6pk=", "2345678901", "380051", "456 Customer Ave", null, "Customer" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "CategoryId", "CreatedAt", "CreatedBy", "Description", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("d4e5f6a7-4567-8910-1234-56789abcdef1"), new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("a1b2c3d4-1234-5678-9012-abcdef123456"), "Electronic devices and accessories", "Electronics" },
+                    { new Guid("e5f6a7b8-5678-9101-2345-6789abcdef12"), new DateTime(2023, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("a1b2c3d4-1234-5678-9012-abcdef123456"), "Men's and women's clothing", "Clothing" },
+                    { new Guid("f6a7b8c9-6789-1011-3456-789abcdef123"), new DateTime(2023, 2, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("a1b2c3d4-1234-5678-9012-abcdef123456"), "Home appliances and kitchenware", "Home & Kitchen" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Orders",
+                columns: new[] { "OrderId", "CreatedAt", "ShippingPostalCode", "Status", "TotalAmount", "UpdatedAt", "UserId" },
+                values: new object[] { new Guid("7a8b9c0d-7890-1112-3456-789abcdef123"), new DateTime(2023, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "380051", "Delivered", 849.97m, new DateTime(2023, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("b2c3d4e5-2345-6789-0123-bcdef1234567") });
+
+            migrationBuilder.InsertData(
+                table: "ShoppingCarts",
+                columns: new[] { "CartId", "CreatedAt", "UpdatedAt", "UserId" },
+                values: new object[] { new Guid("4d5e6f7a-4567-8910-1234-56789abcdef1"), new DateTime(2023, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new Guid("b2c3d4e5-2345-6789-0123-bcdef1234567") });
+
+            migrationBuilder.InsertData(
+                table: "OrderStatusLogs",
+                columns: new[] { "LogId", "ChangedAt", "ChangedBy", "NewStatus", "OldStatus", "OrderId", "ProductId" },
+                values: new object[,]
+                {
+                    { new Guid("0d1e2f3a-0123-1415-6789-abcdef123456"), new DateTime(2023, 5, 1, 10, 0, 0, 0, DateTimeKind.Unspecified), new Guid("a1b2c3d4-1234-5678-9012-abcdef123456"), "Accepted", "Pending", new Guid("7a8b9c0d-7890-1112-3456-789abcdef123"), null },
+                    { new Guid("1e2f3a4b-1234-1516-7890-bcdef1234567"), new DateTime(2023, 5, 2, 15, 0, 0, 0, DateTimeKind.Unspecified), new Guid("a1b2c3d4-1234-5678-9012-abcdef123456"), "Delivered", "Accepted", new Guid("7a8b9c0d-7890-1112-3456-789abcdef123"), null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "CategoryId", "CreatedAt", "CreatedBy", "Description", "ImageUrl", "Name", "Price", "SKU", "StockQuantity", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { new Guid("1a2b3c4d-1234-5678-9012-abcdef123456"), new Guid("d4e5f6a7-4567-8910-1234-56789abcdef1"), new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("a1b2c3d4-1234-5678-9012-abcdef123456"), "Latest smartphone with advanced features", "images/products/smartphone-x.jpg", "Smartphone X", 799.99m, "SPX-1001", 100, null },
+                    { new Guid("2b3c4d5e-2345-6789-0123-bcdef1234567"), new Guid("d4e5f6a7-4567-8910-1234-56789abcdef1"), new DateTime(2023, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("a1b2c3d4-1234-5678-9012-abcdef123456"), "Noise cancelling wireless headphones", "images/products/headphones.jpg", "Wireless Headphones", 199.99m, "WH-2002", 50, null },
+                    { new Guid("3c4d5e6f-3456-7890-1234-cdef12345678"), new Guid("e5f6a7b8-5678-9101-2345-6789abcdef12"), new DateTime(2023, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("a1b2c3d4-1234-5678-9012-abcdef123456"), "Premium quality cotton t-shirt", "images/products/tshirt.jpg", "Cotton T-Shirt", 24.99m, "CT-3003", 200, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "CartItems",
+                columns: new[] { "CartItemId", "AddedAt", "CartId", "ProductId", "Quantity" },
+                values: new object[,]
+                {
+                    { new Guid("5e6f7a8b-5678-9101-2345-6789abcdef12"), new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("4d5e6f7a-4567-8910-1234-56789abcdef1"), new Guid("1a2b3c4d-1234-5678-9012-abcdef123456"), 1 },
+                    { new Guid("6f7a8b9c-6789-1011-3456-789abcdef123"), new DateTime(2023, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("4d5e6f7a-4567-8910-1234-56789abcdef1"), new Guid("3c4d5e6f-3456-7890-1234-cdef12345678"), 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "OrderItems",
+                columns: new[] { "OrderItemId", "OrderId", "ProductId", "Quantity", "UnitPrice" },
+                values: new object[,]
+                {
+                    { new Guid("8b9c0d1e-8901-1213-4567-89abcdef1234"), new Guid("7a8b9c0d-7890-1112-3456-789abcdef123"), new Guid("1a2b3c4d-1234-5678-9012-abcdef123456"), 1, 799.99m },
+                    { new Guid("9c0d1e2f-9012-1314-5678-9abcdef12345"), new Guid("7a8b9c0d-7890-1112-3456-789abcdef123"), new Guid("3c4d5e6f-3456-7890-1234-cdef12345678"), 2, 24.99m }
                 });
 
             migrationBuilder.CreateIndex(

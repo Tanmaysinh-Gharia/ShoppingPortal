@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using ShoppingPortal.Core.Enums;
 
 namespace ShoppingPortal.Data.Entities
 {
@@ -18,8 +19,12 @@ namespace ShoppingPortal.Data.Entities
         public Guid UserId { get; set; }
 
         [Required]
-        [StringLength(50)]
-        public string Username { get; set; }
+        [StringLength(20)]
+        public string Firstname{ get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string Lastname { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -43,7 +48,7 @@ namespace ShoppingPortal.Data.Entities
 
         [Required]
         [StringLength(20)]
-        public string UserType { get; set; } // 'Customer', 'Admin', 'Vendor'
+        public UserTypeEnum UserType { get; set; } = UserTypeEnum.Customer;// 'Customer', 'Admin'
 
         [StringLength(200)]
         public string StreetAddress { get; set; }

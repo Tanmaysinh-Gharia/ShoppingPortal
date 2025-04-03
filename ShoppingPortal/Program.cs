@@ -1,4 +1,8 @@
+using ShoppingPortal.Services.Profiles;
 using ShoppingPortal.Services;
+using ShoppingPortal.Core.Interfaces;
+using ShoppingPortal.Services.UserServices;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +12,27 @@ builder.Services.AddControllersWithViews();
 //Add Data Layer
 builder.Services.AddDataLayer(builder.Configuration);
 
+//Add auto mapper
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<UserProfile>());
+
+
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+    option =>
+    {
+        option.LoginPath = "/Account/Login";
+        option.AccessDeniedPath = "/Account/AccessDenied";
+    });
+//builder.Services.AddDistributedMemoryCache(); // Required for session storage
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session timeout (adjust as needed)
+    options.Cookie.HttpOnly = true; // Prevent JavaScript access for security
+    options.Cookie.IsEssential = true; // Ensure session works even with GDPR policies
+});
 var app = builder.Build();
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -23,10 +47,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();

@@ -1,9 +1,11 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingPortal.Models;
 
 namespace ShoppingPortal.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -13,6 +15,7 @@ namespace ShoppingPortal.Controllers
             _logger = logger;
         }
 
+        [Authorize(Roles = "Customer")]
         public IActionResult Index()
         {
             return View();

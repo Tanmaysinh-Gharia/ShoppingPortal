@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShoppingPortal.Core.Enums;
 
 namespace ShoppingPortal.Data.Entities
 {
@@ -22,11 +23,11 @@ namespace ShoppingPortal.Data.Entities
 
         [Required]
         [StringLength(20)]
-        public string OldStatus { get; set; }
+        public OrderStatusEnum OldStatus { get; set; }
 
         [Required]
         [StringLength(20)]
-        public string NewStatus { get; set; }
+        public OrderStatusEnum NewStatus { get; set; }
 
         [Required]
         [ForeignKey("ChangedByUser")]

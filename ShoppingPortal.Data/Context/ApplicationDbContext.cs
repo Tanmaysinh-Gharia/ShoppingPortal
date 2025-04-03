@@ -8,6 +8,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using ShoppingPortal.Core.Helpers;
+
+using System.Security.Cryptography;
+using ShoppingPortal.Data.Seeds;
 
 namespace ShoppingPortal.Data.Context
 {
@@ -29,6 +33,22 @@ namespace ShoppingPortal.Data.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            // Seed data - now using static values
+            modelBuilder.Entity<Address>().HasData(AddressSeedData.GetSeedAddress());
+            modelBuilder.Entity<User>().HasData(UserSeedData.GetSeedUsers());
+            modelBuilder.Entity<Category>().HasData(CategorySeedData.GetSeedCategories());
+            modelBuilder.Entity<Product>().HasData(ProductSeedData.GetSeedProducts());
+            modelBuilder.Entity<ShoppingCart>().HasData(ShoppingCartSeedData.GetSeedShoppingCarts());
+            modelBuilder.Entity<CartItem>().HasData(CartItemSeedData.GetSeedCartItems());
+            modelBuilder.Entity<Order>().HasData(OrderSeedData.GetSeedOrders());
+            modelBuilder.Entity<OrderItem>().HasData(OrderItemSeedData.GetSeedOrderItems());
+            modelBuilder.Entity<OrderStatusLog>().HasData(OrderStatusLogSeedData.GetSeedOrderStatusLogs());
+
+
+
+
+
+            //Configuring Models
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new AddressConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
@@ -82,5 +102,7 @@ namespace ShoppingPortal.Data.Context
                 this.ChangeTracker.LazyLoadingEnabled = false;
             }
         }
+
+
     }
 }

@@ -16,11 +16,13 @@ namespace ShoppingPortal.Data.Configurations
 
             builder.Property(osl => osl.OldStatus)
                 .IsRequired()
-                .HasMaxLength(20);
+                .HasMaxLength(20)
+                .HasConversion<string>();
 
             builder.Property(osl => osl.NewStatus)
                 .IsRequired()
-                .HasMaxLength(20);
+                .HasMaxLength(20)
+                .HasConversion<string>();
 
             builder.Property(osl => osl.ChangedAt)
                 .IsRequired()

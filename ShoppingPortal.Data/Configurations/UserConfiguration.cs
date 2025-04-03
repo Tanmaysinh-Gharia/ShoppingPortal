@@ -18,9 +18,13 @@ namespace ShoppingPortal.Data.Configurations
             builder.Property(u => u.UserId)
                 .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-            builder.Property(u => u.Username)
+            builder.Property(u => u.Firstname)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(20);
+            
+            builder.Property(u => u.Lastname)
+                .IsRequired()
+                .HasMaxLength(20);
 
             builder.Property(u => u.Email)
                 .IsRequired()
