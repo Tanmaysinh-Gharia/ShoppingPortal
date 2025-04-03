@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using ShoppingPortal.Core.Interfaces
+@inject  ICartService CartService
+
+@{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    // var cartCount = userId != null ? await CartService.GetCartItemCountAsync(Guid.Parse(userId)) : 0;
+}
+
+<li class="nav-item">
+    <a class="nav-link" href="/Cart">
+        <i class="bi bi-cart"></i>
+        @* <span class="cart-count badge bg-primary">@cartCount</span> *@
+    </a>
+</li>

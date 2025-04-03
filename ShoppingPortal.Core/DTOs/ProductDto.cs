@@ -17,5 +17,10 @@ namespace ShoppingPortal.Core.DTOs
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ImageUrl { get; set; }
+
+        // Additional properties for cart functionality
+
+        public int CurrentQuantity { get; set; } // Default quantity
+        public bool IsInCart { get; set; } // To track if already in cart
     }
 }

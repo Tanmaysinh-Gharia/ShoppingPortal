@@ -10,7 +10,8 @@ namespace ShoppingPortal.Core.Interfaces
     public interface IProductService
     {
         
-            Task<(IEnumerable<ProductDto> Products, int TotalCount)> GetPaginatedProductsAsync(int page, int pageSize);
-        
+            Task<(IEnumerable<ProductDto> Products, int TotalCount)> GetPaginatedProductsAsync(int page, int pageSize, Guid? userId = null);
+
+        Task<ProductDto> GetProductByIdAsync(Guid productId);
     }
 }

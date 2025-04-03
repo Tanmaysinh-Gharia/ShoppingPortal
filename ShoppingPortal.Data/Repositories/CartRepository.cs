@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ShoppingPortal.Core.DTOs;
 using ShoppingPortal.Data.Context;
 using ShoppingPortal.Data.Entities;
 using ShoppingPortal.Data.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShoppingPortal.Data.Repositories
@@ -36,16 +35,41 @@ namespace ShoppingPortal.Data.Repositories
         public async Task AddCartItemAsync(CartItem cartItem)
         {
             await _context.CartItems.AddAsync(cartItem);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateCartItemAsync(CartItem cartItem)
         {
             _context.CartItems.Update(cartItem);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> SaveChangesAsync()
+        public async Task RemoveCartItemAsync(CartItem cartItem)
         {
-            return await _context.SaveChangesAsync() > 0;
+            _context.CartItems.Remove(cartItem);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ClearCartAsync(Guid cartId)
+        {
+            var cartItems = await _context.CartItems
+                .Where(ci => ci.CartId == cartId)
+                .ToListAsync();
+
+            _context.CartItems.RemoveRange(cartItems);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> GetCartItemCountAsync(Guid userId)
+        {
+            var cart = await GetCartByUserIdAsync(userId);
+            return cart?.CartItems.Sum(ci => ci.Quantity) ?? 0;
+        }
+
+        public async Task CreateCartAsync(ShoppingCart cart)
+        {
+            await _context.ShoppingCarts.AddAsync(cart);
+            await _context.SaveChangesAsync();
         }
     }
 }

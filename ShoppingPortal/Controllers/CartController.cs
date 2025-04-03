@@ -8,43 +8,115 @@ using System.Threading.Tasks;
 
 namespace ShoppingPortal.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Customer")]
     public class CartController : Controller
     {
         private readonly ICartService _cartService;
+        private readonly IProductService _productService;
 
-        public CartController(ICartService cartService)
+        public CartController(
+            ICartService cartService,
+            IProductService productService)
         {
             _cartService = cartService;
+            _productService = productService;
+        }
+
+        private Guid GetCurrentUserId()
+        {
+            return Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var userId = GetCurrentUserId();
+            var cart = await _cartService.GetCartAsync(userId);
+            return View(cart);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart([FromBody] AddToCartDto addToCartDto)
+        public async Task<IActionResult> AddToCart(AddToCartDto addToCartDto)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var success = await _cartService.AddToCartAsync(addToCartDto, userId);
-
-            if (!success)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Failed to add item to cart");
+                return BadRequest(ModelState);
             }
 
-            // In real implementation, you'd get actual cart count
-            return Ok(new { cartCount = 1 });
+            try
+            {
+                var userId = GetCurrentUserId();
+                await _cartService.AddToCartAsync(userId, addToCartDto);
+                return Json(new { success = true, itemCount = await _cartService.GetCartItemCountAsync(userId) });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> ProceedToCheckout([FromBody] AddToCartDto addToCartDto)
+        public async Task<IActionResult> UpdateCartItem(UpdateQuantityDto updateQuantityDto)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var success = await _cartService.ProceedToCheckoutAsync(addToCartDto, userId);
-
-            if (!success)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Failed to proceed to checkout");
+                return BadRequest(ModelState);
             }
 
-            return Ok();
+            try
+            {
+                var userId = GetCurrentUserId();
+                await _cartService.UpdateCartItemAsync(userId, updateQuantityDto);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(Guid productId)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+                await _cartService.RemoveFromCartAsync(userId, productId);
+                return Json(new { success = true, itemCount = await _cartService.GetCartItemCountAsync(userId) });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ClearCart()
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+                await _cartService.ClearCartAsync(userId);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PlaceOrder()
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+                var success = await _cartService.PlaceOrderAsync(userId);
+                return Json(new { success });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
         }
     }
 }

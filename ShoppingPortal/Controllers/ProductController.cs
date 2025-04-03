@@ -13,12 +13,14 @@ using ShoppingPortal.Services.ProductServices;
 using ShoppingPortal.Web.Models;
 using ShoppingPortal.Core.Constants;
 using ShoppingPortal.Core.Constants.ShoppingPortal.Core.Constants;
+using ShoppingPortal.Services.CartServices;
 namespace ShoppingPortal.Web.Controllers
 {
     [Authorize(Roles = "Customer")]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly ICartService _cartService;
         private const int InitialPageSize = AppConstants.InitialPageSize;
         private const int SubsequentPageSize = AppConstants.SubsequentPageSize;
         private const string ImageBasePath = AppConstants.ImageBasePath;
@@ -34,7 +36,13 @@ namespace ShoppingPortal.Web.Controllers
             //Assigning Default Images Incase if it doesn't get image
             ViewData["DefaultImage"] = DefaultImage;
 
-            var (products, totalCount) = await _productService.GetPaginatedProductsAsync(1, InitialPageSize);
+            Guid? userId = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
+
+            var (products, totalCount) = await _productService.GetPaginatedProductsAsync(1, InitialPageSize,userId);
             var model = new ProductListViewModel
             {
                 Products = products.Select(p => new ProductDto
@@ -48,6 +56,8 @@ namespace ShoppingPortal.Web.Controllers
                     StockQuantity = p.StockQuantity,
                     CategoryId = p.CategoryId,
                     CategoryName = p.CategoryName,
+                    IsInCart = p.IsInCart,
+                    CurrentQuantity = p.CurrentQuantity,
                     ImageUrl = $"{ImageBasePath}{p.ProductId}.webp" // Standardized path
                 }),
                 PagingInfo = new PagingInfo
@@ -63,7 +73,12 @@ namespace ShoppingPortal.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> LoadMore(int page)
         {
-            var (products, _) = await _productService.GetPaginatedProductsAsync(page, SubsequentPageSize);
+            Guid? userId = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
+            var (products, _) = await _productService.GetPaginatedProductsAsync(page, SubsequentPageSize ,userId );
             return PartialView("_ProductCards", products.Select(p => new ProductDto
             {
                 // Map other properties
@@ -90,6 +105,22 @@ namespace ShoppingPortal.Web.Controllers
             }
 
             return PhysicalFile(imagePath, "image/webp");
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> GetCartStatus(Guid productId)
+        {
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var cart = await _cartService.GetCartAsync(userId);
+            var cartItem = cart.Items.FirstOrDefault(ci => ci.ProductId == productId);
+
+            return Json(new
+            {
+                isInCart = cartItem != null,
+                quantity = cartItem?.Quantity ?? 1
+            });
         }
     }
 }

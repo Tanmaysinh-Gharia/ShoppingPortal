@@ -4,6 +4,7 @@ using ShoppingPortal.Core.Interfaces;
 using ShoppingPortal.Services.UserServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ShoppingPortal.Services.ProductServices;
+using ShoppingPortal.Services.CartServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile<UserProfile>();
     cfg.AddProfile<ProductProfile>();
+    cfg.AddProfile<CartProfile>();
 });
 
 
@@ -36,10 +38,13 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true; // Prevent JavaScript access for security
     options.Cookie.IsEssential = true; // Ensure session works even with GDPR policies
 });
+
+// Services
 builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<ICartService, CartService>();
 
 var app = builder.Build();
 app.UseSession();
