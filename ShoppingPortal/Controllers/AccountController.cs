@@ -67,7 +67,7 @@ namespace ShoppingPortal.Web.Controllers
                 new AuthenticationProperties
                 {
                     IsPersistent = true,
-                    ExpiresUtc = DateTime.UtcNow.AddDays(7) 
+                    ExpiresUtc = DateTime.Now.AddDays(7) 
                 });
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))

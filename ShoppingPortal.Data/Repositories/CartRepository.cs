@@ -26,6 +26,16 @@ namespace ShoppingPortal.Data.Repositories
                 .FirstOrDefaultAsync(sc => sc.UserId == userId);
         }
 
+        public async Task<ShoppingCart> GetCartByUserIdWithNoTrackingAsync(Guid userId)
+        {
+            return await _context.ShoppingCarts
+                .AsNoTracking()
+                .Include(sc => sc.CartItems)
+                .ThenInclude(ci => ci.Product)
+                .FirstOrDefaultAsync(sc => sc.UserId == userId);
+        }
+
+
         public async Task<CartItem> GetCartItemAsync(Guid cartId, Guid productId)
         {
             return await _context.CartItems

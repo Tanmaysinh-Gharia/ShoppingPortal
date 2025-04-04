@@ -26,7 +26,7 @@ namespace ShoppingPortal.Data.Entities
         public int Quantity { get; set; }
 
         [Required]
-        public DateTime AddedAt { get; set; } = DateTime.UtcNow;
+        public DateTime AddedAt { get; set; } = DateTime.Now;
 
         // Navigation properties
         public ShoppingCart ShoppingCart { get; set; }

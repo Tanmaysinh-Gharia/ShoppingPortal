@@ -1,0 +1,32 @@
+﻿@using ShoppingPortal.Core.Constants
+@using ShoppingPortal.Web.Models
+@using ShoppingPortal.Core.DTOs
+@model ProductListViewModel
+@{
+    ViewData["Title"] = "Order History";
+}
+
+<div class="container">
+    <h2>Order history</h2>
+
+    <div id="product-container" class="row">
+        @foreach (var product in Model.Products)
+        {
+            <partial name="_ProductCards" model="product" />
+        }
+    </div>
+
+    @if (Model.PagingInfo.TotalPages > 1)
+    {
+        <div class="text-center mt-3">
+            <button id="load-more" class="btn btn-primary"
+                    data-current-page="1"
+                    data-total-pages="@Model.PagingInfo.TotalPages">
+                Load More
+            </button>
+        </div>
+    }
+</div>
+@section Scripts {
+    <script src="~/js/order.js"></script>
+}

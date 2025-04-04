@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace ShoppingPortal.Data.Interfaces
 {
-    public interface IUserRepository
+    public interface IOrderRepository
     {
-
-        //Task<User> GetByUsernameAsync(string username);
-        Task<User> GetByEmailAsync(string email);
-
-        Task<string> GetPostalCodeOfUser(Guid userId);
+        Task RemoveItemsFromCartAndAddToOrder(Guid cartId, ICollection<CartItem> cartItems, ICollection<OrderItem> orderItems);
     }
 }

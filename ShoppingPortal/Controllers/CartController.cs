@@ -104,19 +104,5 @@ namespace ShoppingPortal.Web.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> PlaceOrder()
-        {
-            try
-            {
-                var userId = GetCurrentUserId();
-                var success = await _cartService.PlaceOrderAsync(userId);
-                return Json(new { success });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { success = false, message = ex.Message });
-            }
-        }
     }
 }

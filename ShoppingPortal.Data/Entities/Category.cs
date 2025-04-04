@@ -25,7 +25,7 @@ namespace ShoppingPortal.Data.Entities
         public Guid CreatedBy { get; set; }
 
         [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         // Navigation properties
         public User CreatedByUser { get; set; }

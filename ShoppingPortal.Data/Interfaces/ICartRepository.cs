@@ -16,5 +16,8 @@ namespace ShoppingPortal.Data.Interfaces
         Task ClearCartAsync(Guid cartId);
         Task<int> GetCartItemCountAsync(Guid userId);
         Task CreateCartAsync(ShoppingCart cart);
+
+        Task<ShoppingCart> GetCartByUserIdWithNoTrackingAsync(Guid userId);
     }
+        
 }

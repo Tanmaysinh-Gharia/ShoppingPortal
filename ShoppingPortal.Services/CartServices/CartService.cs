@@ -4,12 +4,15 @@ using ShoppingPortal.Core.Constants;
 using ShoppingPortal.Core.Constants.ShoppingPortal.Core.Constants;
 using ShoppingPortal.Core.DTOs;
 using ShoppingPortal.Core.Enums;
+using ShoppingPortal.Core.Exceptions;
 using ShoppingPortal.Core.Interfaces;
 using ShoppingPortal.Data.Context;
 using ShoppingPortal.Data.Entities;
 using ShoppingPortal.Data.Interfaces;
 using System;
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -92,7 +95,7 @@ namespace ShoppingPortal.Services.CartServices
                 cart = new ShoppingCart
                 {
                     UserId = userId,
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = DateTime.Now
                 };
                 _context.ShoppingCarts.Add(cart);
             }
@@ -115,7 +118,7 @@ namespace ShoppingPortal.Services.CartServices
                 {
                     ProductId = addToCartDto.ProductId,
                     Quantity = addToCartDto.Quantity,
-                    AddedAt = DateTime.UtcNow
+                    AddedAt = DateTime.Now
                 });
             }
 
@@ -191,30 +194,79 @@ namespace ShoppingPortal.Services.CartServices
 
         public async Task<bool> PlaceOrderAsync(Guid userId)
         {
-            var cart = await GetCartAsync(userId);
-            if (!cart.Items.Any())
+            using var transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.Snapshot);
+            try
             {
-                throw new ValidationException("Cart is empty");
+                // 1. Get cart with items (no tracking for manual attach) -- || Eager Loading
+                ShoppingCart cart = await _cartRepository.GetCartByUserIdWithNoTrackingAsync(userId);
+
+                if (cart == null || !cart.CartItems.Any())
+                    throw new ValidationException("Cart is empty");
+
+                // 2. Attach Rowversion and check
+                Dictionary<Guid, byte[]> productVersions = new Dictionary<Guid, byte[]>();
+
+                foreach (CartItem item in cart.CartItems)
+                {
+                    _context.Products.Attach(item.Product);
+                    productVersions.Add(item.ProductId, item.Product.RowVersion);
+                }
+
+                // 3. Create Order
+                Guid newOrderID = Guid.NewGuid();
+                Order order = new Order
+                {
+                    UserId = userId,
+                    OrderId = newOrderID,
+                    CreatedAt = DateTime.Now,
+                    Status = OrderStatusEnum.Pending,
+                    TotalAmount = cart.CartItems.Sum(ci => ci.Product.Price * ci.Quantity),
+                    OrderItems = cart.CartItems.Select(ci => new OrderItem
+                    {
+                        OrderItemId = Guid.NewGuid(),
+                        OrderId = newOrderID,
+                        ProductId = ci.ProductId,
+                        Quantity = ci.Quantity,
+                        UnitPrice = ci.Product.Price
+                    }).ToList()
+                };
+
+                //Adding to database    
+                _context.Orders.Add(order);
+                //_context.OrderItems.AddRange(order.OrderItems); // -> This will add without any concurrancy check of row version
+
+                // 4. Concurrancy check Of Products
+                foreach (OrderItem item in order.OrderItems)
+                {
+                    var currentProduct = await _context.Products
+                        .Where(p => p.ProductId == item.ProductId)
+                        .Select(p => new { p.Name,p.StockQuantity, p.RowVersion })
+                        .FirstOrDefaultAsync();
+
+                    if (!StructuralComparisons.StructuralEqualityComparer
+                        .Equals(productVersions[item.ProductId], currentProduct.RowVersion))
+                    {
+                        throw new DbUpdateConcurrencyException($"Product {item.ProductId} was modified concurrently");
+                    }
+                    if (currentProduct.StockQuantity < item.Quantity)
+                    {
+                        throw new InsufficientStockException(currentProduct.Name,currentProduct.StockQuantity);
+                    }
+                    _context.OrderItems.Add(item);
+                }
+
+                // 5. Clear Cart and Add to Orders
+                _context.CartItems.RemoveRange(cart.CartItems);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return true;
             }
-
-            // Create order logic here
-            // This is a simplified version - you'll need to expand this
-            var order = new Order
+            catch (Exception ex)
             {
-                UserId = userId,
-                Status = OrderStatusEnum.Pending,
-                TotalAmount = cart.TotalAmount,
-                ShippingPostalCode = "TODO", // Get from user address
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-
-            // Clear the cart after order is placed
-            await ClearCartAsync(userId);
-
-            return true;
+                await transaction.RollbackAsync();
+                throw ex;
+            }
         }
     }
 }

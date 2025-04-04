@@ -29,6 +29,14 @@ namespace ShoppingPortal.Data.Repositories
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<string> GetPostalCodeOfUser(Guid userId)
+        {
+           return await _context.Users
+                        .Where(u => u.UserId == userId)
+                        .Select(u => u.PostalCode)
+                        .FirstOrDefaultAsync();
+        }
+
         
     }
 }

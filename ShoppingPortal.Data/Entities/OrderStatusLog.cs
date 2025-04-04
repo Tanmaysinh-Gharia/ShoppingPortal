@@ -34,7 +34,7 @@ namespace ShoppingPortal.Data.Entities
         public Guid ChangedBy { get; set; }
 
         [Required]
-        public DateTime ChangedAt { get; set; } = DateTime.UtcNow;
+        public DateTime ChangedAt { get; set; } = DateTime.Now;
 
         // Navigation properties
         public Order Order { get; set; }

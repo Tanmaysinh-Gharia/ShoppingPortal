@@ -5,6 +5,7 @@ using ShoppingPortal.Services.UserServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ShoppingPortal.Services.ProductServices;
 using ShoppingPortal.Services.CartServices;
+using ShoppingPortal.Services.OrderServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,8 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<ICartService, CartService>();
+
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
 app.UseSession();

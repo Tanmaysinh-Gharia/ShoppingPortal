@@ -4,6 +4,7 @@ using ShoppingPortal.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,9 @@ namespace ShoppingPortal.Data.Configurations
             builder.Property(p => p.SKU)
                 .IsRequired()
                 .HasMaxLength(50);
+
+            builder.Property(p => p.RowVersion)
+            .IsRowVersion();
 
             builder.HasIndex(p => p.SKU)
                 .IsUnique();
@@ -47,6 +51,9 @@ namespace ShoppingPortal.Data.Configurations
                 .WithMany(u => u.ProductsCreated)
                 .HasForeignKey(p => p.CreatedBy)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+            
         }
 
     }
