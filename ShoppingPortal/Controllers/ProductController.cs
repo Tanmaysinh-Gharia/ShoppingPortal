@@ -67,6 +67,7 @@ namespace ShoppingPortal.Web.Controllers
                     TotalItems = totalCount
                 }
             };
+
             return View(model);
         }
 
