@@ -46,7 +46,7 @@
                                             <td>$@((item.Price * item.Quantity).ToString("N2"))</td>
                                             <td>
                                                 <button class="btn btn-danger btn-sm remove-item">
-                                                    <i class="bi bi-trash"></i>
+                                                    <i class="bi bi-trash"> </i>
                                                 </button>
                                             </td>
                                         </tr>
@@ -95,6 +95,7 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
+
             // Update quantity
             $('.quantity-input').on('change', function() {
                 const productId = $(this).closest('tr').data('product-id');
@@ -154,9 +155,8 @@
                 $.post('/Cart/RemoveFromCart', { productId })
                     .done(function(response) {
                         if (response.success) {
-                            if (response.itemCount === 0) {
-                                location.reload(); // Refresh to show empty cart
-                            } else {
+                            location.reload(); // Refresh to show empty cart
+                            if (response.itemCount != 0) {
                                 $('tr[data-product-id="' + productId + '"]').remove();
                                 updateCartSummary(response.cart);
                                 updateCartCount(response.itemCount);

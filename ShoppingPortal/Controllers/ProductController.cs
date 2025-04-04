@@ -59,7 +59,7 @@ namespace ShoppingPortal.Web.Controllers
                     IsInCart = p.IsInCart,
                     CurrentQuantity = p.CurrentQuantity,
                     ImageUrl = $"{ImageBasePath}{p.ProductId}.webp" // Standardized path
-                }),
+                }), 
                 PagingInfo = new PagingInfo
                 {
                     CurrentPage = 1,
