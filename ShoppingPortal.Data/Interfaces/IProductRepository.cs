@@ -12,5 +12,18 @@ namespace ShoppingPortal.Data.Interfaces
         Task<(IEnumerable<Product> Products, int TotalCount)> GetPaginatedAsync(int page, int pageSize);
 
         Task<Product> GetByIdAsync(Guid productId);
+
+        Task<(IEnumerable<Product> Products, int TotalCount)> GetPaginatedAsync(
+                int page,
+                int pageSize,
+                string searchTerm = null,
+                string sortBy = "name",
+                bool sortAsc = true,
+                Guid? categoryId = null,
+                decimal? minPrice = null,
+                decimal? maxPrice = null,
+                bool? inStock = null);
+
+        Task<List<Category>> GetCategoriesAsync();
     }
 }

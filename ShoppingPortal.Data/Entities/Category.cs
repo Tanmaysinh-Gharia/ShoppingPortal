@@ -29,6 +29,7 @@ namespace ShoppingPortal.Data.Entities
 
         // Navigation properties
         public User CreatedByUser { get; set; }
-        public ICollection<Product> Products { get; set; }
+
+        public ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
     }
 }

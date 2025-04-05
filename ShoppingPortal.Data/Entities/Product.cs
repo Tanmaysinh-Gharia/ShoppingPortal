@@ -30,9 +30,6 @@ namespace ShoppingPortal.Data.Entities
         [Required]
         public int StockQuantity { get; set; }
 
-        [Required]
-        [ForeignKey("Category")]
-        public Guid CategoryId { get; set; }
 
         [Required]
         [ForeignKey("CreatedByUser")]
@@ -49,7 +46,8 @@ namespace ShoppingPortal.Data.Entities
         public byte[] RowVersion { get; set; }
 
         // Navigation properties
-        public Category Category { get; set; }
+
+        public ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
         public User CreatedByUser { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
         public ICollection<CartItem> CartItems { get; set; }

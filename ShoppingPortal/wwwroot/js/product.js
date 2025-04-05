@@ -140,4 +140,46 @@ $(document).ready(function () {
                 });
         }
     });
+
+    // Load more with filters
+    $('#load-more').on('click', function () {
+        const button = $(this);
+        const nextPage = parseInt(button.data('current-page')) + 1;
+
+        $.get('/Product/LoadMore', {
+            page: nextPage,
+            searchTerm: button.data('search-term'),
+            sortBy: button.data('sort-by'),
+            sortAsc: button.data('sort-asc'),
+            categoryId: button.data('category-id'),
+            minPrice: button.data('min-price'),
+            maxPrice: button.data('max-price'),
+            inStock: button.data('in-stock')
+        })
+            .done(function (data) {
+                $('#product-container').append(data);
+                button.data('current-page', nextPage);
+                if (nextPage >= parseInt(button.data('total-pages'))) {
+                    button.hide();
+                }
+            })
+            .fail(function () {
+                alert('Error loading more products');
+            });
+    });
+
+    // Submit form via AJAX for better UX
+    $('#filter-form').on('submit', function (e) {
+        e.preventDefault();
+        const form = $(this);
+
+        $.get(form.attr('action'), form.serialize())
+            .done(function (data) {
+                $('#product-container').html($(data).find('#product-container').html());
+                $('#load-more').replaceWith($(data).find('#load-more'));
+            })
+            .fail(function () {
+                alert('Error applying filters');
+            });
+    });
 });

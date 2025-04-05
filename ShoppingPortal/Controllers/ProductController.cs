@@ -14,6 +14,7 @@ using ShoppingPortal.Web.Models;
 using ShoppingPortal.Core.Constants;
 using ShoppingPortal.Core.Constants.ShoppingPortal.Core.Constants;
 using ShoppingPortal.Services.CartServices;
+using Microsoft.EntityFrameworkCore;
 namespace ShoppingPortal.Web.Controllers
 {
     [Authorize(Roles = "Customer")]
@@ -30,8 +31,15 @@ namespace ShoppingPortal.Web.Controllers
         {
             _productService = productService;
         }
-
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(
+            string searchTerm = null,
+            string sortBy = "name",
+            bool sortAsc = true,
+            Guid? categoryId = null,
+            decimal? minPrice = null,
+            decimal? maxPrice = null,
+            bool? inStock = null)
         {
             //Assigning Default Images Incase if it doesn't get image
             ViewData["DefaultImage"] = DefaultImage;
@@ -42,7 +50,9 @@ namespace ShoppingPortal.Web.Controllers
                 userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             }
 
-            var (products, totalCount) = await _productService.GetPaginatedProductsAsync(1, InitialPageSize,userId);
+            var (products, totalCount) = await _productService.GetPaginatedProductsAsync(
+                    1, InitialPageSize, userId, searchTerm, sortBy, sortAsc, categoryId, minPrice, maxPrice, inStock);
+
             var model = new ProductListViewModel
             {
                 Products = products.Select(p => new ProductDto
@@ -54,22 +64,112 @@ namespace ShoppingPortal.Web.Controllers
                     SKU = p.SKU,
                     Price = p.Price,
                     StockQuantity = p.StockQuantity,
-                    CategoryId = p.CategoryId,
-                    CategoryName = p.CategoryName,
+                    Categories = p.Categories,
                     IsInCart = p.IsInCart,
                     CurrentQuantity = p.CurrentQuantity,
                     ImageUrl = $"{ImageBasePath}{p.ProductId}.webp" // Standardized path
-                }), 
+                }),
                 PagingInfo = new PagingInfo
                 {
                     CurrentPage = 1,
                     ItemsPerPage = InitialPageSize,
                     TotalItems = totalCount
-                }
+                },
+                SearchTerm = searchTerm,
+                SortBy = sortBy,
+                SortAsc = sortAsc,
+                CategoryId = categoryId,
+                MinPrice = minPrice,
+                MaxPrice = maxPrice,
+                InStock = inStock
             };
 
+            ViewBag.Categories = await GetCategoriesAsync();
             return View(model);
         }
+
+
+        //[HttpGet]
+        //public async Task<IActionResult> Index(
+        //string searchTerm = null,
+        //    string sortBy = "name",
+        //    bool sortAsc = true,
+        //    Guid? categoryId = null,
+        //    decimal? minPrice = null,
+        //    decimal? maxPrice = null,
+        //    bool? inStock = null)
+        //{
+        //    ViewData["DefaultImage"] = DefaultImage;
+        //    Guid? userId = User.Identity.IsAuthenticated
+        //        ? Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))
+        //        : null;
+
+        //    var (products, totalCount) = await _productService.GetPaginatedProductsAsync(
+        //        1, InitialPageSize, userId, searchTerm, sortBy, sortAsc, categoryId, minPrice, maxPrice, inStock);
+
+        //    var model = new ProductListViewModel
+        //    {
+        //        Products = products.Select(p => new ProductDto
+        //        {
+        //            // Map properties
+        //            ImageUrl = $"{ImageBasePath}{p.ProductId}.webp",
+        //            Categories = p.Categories
+        //        }),
+        //        PagingInfo = new PagingInfo
+        //        {
+        //            CurrentPage = 1,
+        //            ItemsPerPage = InitialPageSize,
+        //            TotalItems = totalCount
+        //        },
+        //        SearchTerm = searchTerm,
+        //        SortBy = sortBy,
+        //        SortAsc = sortAsc,
+        //        CategoryId = categoryId,
+        //        MinPrice = minPrice,
+        //        MaxPrice = maxPrice,
+        //        InStock = inStock
+        //    };
+
+        //ViewBag.Categories = await GetCategoriesAsync();
+        //    return View(model);
+        //}
+
+        private async Task<List<CategoryDto>> GetCategoriesAsync()
+        {
+            var categories = await _productService.GetCategoriesAsync();
+            return categories;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LoadMore(
+            int page,
+            string searchTerm = null,
+            string sortBy = "name",
+            bool sortAsc = true,
+            Guid? categoryId = null,
+            decimal? minPrice = null,
+            decimal? maxPrice = null,
+            bool? inStock = null)
+        {
+            Guid? userId = User.Identity.IsAuthenticated
+                ? Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))
+                : null;
+
+            var (products, _) = await _productService.GetPaginatedProductsAsync(
+                page, SubsequentPageSize, userId, searchTerm, sortBy, sortAsc,
+                categoryId, minPrice, maxPrice, inStock);
+
+            return PartialView("_ProductCards", products.Select(p => new ProductDto
+            {
+                // Map properties including categories
+                Categories = p.Categories,
+                ImageUrl = $"{ImageBasePath}{p.ProductId}.webp"
+            }));
+        }
+
+
+
+        //Old Methods
 
         [HttpGet]
         public async Task<IActionResult> LoadMore(int page)

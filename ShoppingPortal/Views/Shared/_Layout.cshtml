@@ -30,6 +30,11 @@
                             @* List of navbar buttons  *@
 
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">
+                                    🛍 Our Products
+                                    </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
                                     🛒 Cart
                                     </a>
@@ -42,9 +47,11 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">👤 Profile</a>
                             </li>
 
-                            <li class="nav-item" style="justify-content:right">
-                                <form asp-controller="" asp-action="" method="post" class="d-inline">
-                                    <button type="submit" class="nav-link btn btn-link text-red">Logout</button>
+                            <li class="nav-item" style="justify-content:right; margin-left:auto;">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="nav-link btn btn-outline-danger btn-link text-red ms-auto">
+                                        <i class="bi bi-box-arrow-right"></i>&nbsp; Logout
+                                    </button>
                                 </form>
                             </li>
 
@@ -60,7 +67,6 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            <!-- Toast Notification Container (place before closing </body>) -->
             <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
                 <div id="appToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
@@ -76,9 +82,9 @@
         </main>
     </div>
 
-    <footer class="bg-dark text-white text-center p-3" style="position: fixed;bottom: 1px;left: 0;width: 100%;z-index: 1030;">
+    <footer class="bg-dark text-white text-center p-1" style="position: fixed;bottom: 1px;left: 0;width: 100%;z-index: 1030;">
         <div class="container">
-            &copy; 2025 - ShoppingPortal - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - ShoppingPortal - Developed by Tanmaysinh Gharia (All rights Reserved.)</a>
         </div>
     </footer>
 

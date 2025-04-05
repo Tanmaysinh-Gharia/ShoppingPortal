@@ -42,10 +42,6 @@ namespace ShoppingPortal.Data.Configurations
                 .IsRequired()
                 .HasDefaultValueSql("GETUTCDATE()");
 
-            builder.HasOne(p => p.Category)
-                .WithMany(c => c.Products)
-                .HasForeignKey(p => p.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(p => p.CreatedByUser)
                 .WithMany(u => u.ProductsCreated)

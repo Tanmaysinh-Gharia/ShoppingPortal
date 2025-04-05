@@ -23,7 +23,6 @@ namespace ShoppingPortal.Data.Seeds
                     SKU = "SPX-1001",
                     Price = 799.99m,
                     StockQuantity = 100,
-                    CategoryId = Guid.Parse("d4e5f6a7-4567-8910-1234-56789abcdef1"), // Electronics
                     CreatedBy = Guid.Parse("a1b2c3d4-1234-5678-9012-abcdef123456"), // Admin
                     CreatedAt = new DateTime(2023, 3, 1)
                 },
@@ -35,7 +34,6 @@ namespace ShoppingPortal.Data.Seeds
                     SKU = "WH-2002",
                     Price = 199.99m,
                     StockQuantity = 50,
-                    CategoryId = Guid.Parse("d4e5f6a7-4567-8910-1234-56789abcdef1"), // Electronics
                     CreatedBy = Guid.Parse("a1b2c3d4-1234-5678-9012-abcdef123456"), // Admin
                     CreatedAt = new DateTime(2023, 3, 5)
                 },
@@ -47,7 +45,6 @@ namespace ShoppingPortal.Data.Seeds
                     SKU = "CT-3003",
                     Price = 24.99m,
                     StockQuantity = 200,
-                    CategoryId = Guid.Parse("e5f6a7b8-5678-9101-2345-6789abcdef12"), // Clothing
                     CreatedBy = Guid.Parse("a1b2c3d4-1234-5678-9012-abcdef123456"), // Admin
                     CreatedAt = new DateTime(2023, 3, 10)
                 }

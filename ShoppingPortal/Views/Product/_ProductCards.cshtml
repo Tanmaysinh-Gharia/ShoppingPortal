@@ -3,6 +3,19 @@
 
 <div class="col-md-3 mb-3">
     <div class="card h-100">
+
+        @* Categories Badges *@
+        <div class="card-header">
+            @foreach (var category in Model.Categories.Take(2))
+            {
+                <span class="badge bg-secondary me-1">@category.Name</span>
+            }
+            @if (Model.Categories.Count > 2)
+            {
+                <span class="badge bg-light text-dark">+@(Model.Categories.Count - 2)</span>
+            }
+        </div>
+        @* Product Info *@
         <div class="image-container" style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f8f9fa;">
             <img src="@Model.ImageUrl" class="lazy-load" loading="lazy" style="opacity: 0; transition: opacity 0.3s ease-in-out; width: 80%; height: 100%; object-fit: contain;" onload="this.style.opacity=1;" onerror="this.src='@ViewData["DefaultImage"]'">
         </div>

@@ -12,8 +12,19 @@ namespace ShoppingPortal.Services.Profiles
     {
         public ProductProfile()
         {
+            // Product to ProductDto mapping
             CreateMap<Product, ProductDto>()
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
+                .ForMember(dest => dest.Categories,
+                    opt => opt.MapFrom(src => src.ProductCategories.Select(pc => new CategoryDto
+                    {
+                        CategoryId = pc.Category.CategoryId,
+                        Name = pc.Category.Name
+                    }).ToList()))
+                .ForMember(dest => dest.CurrentQuantity, opt => opt.Ignore())
+                .ForMember(dest => dest.IsInCart, opt => opt.Ignore());
+
+            // Category to CategoryDto mapping
+            CreateMap<Category, CategoryDto>();
         }
     }
 }

@@ -90,6 +90,13 @@ namespace ShoppingPortal.Web.Controllers
 
         #endregion
 
-
+        #region LOG OUT
+        public async Task<IActionResult> Logout()
+        {
+            ViewData["HideNavbar"] = true;
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
+        }
+        #endregion
     }
 }

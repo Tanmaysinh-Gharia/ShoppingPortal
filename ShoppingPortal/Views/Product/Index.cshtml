@@ -7,7 +7,91 @@
 }
 
 <div class="container">
-    <h1>Our Products</h1>
+    <center> <h3 class="container">Our Products </h3> </center>
+
+
+    <!-- Search and Filter Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form id="filter-form" method="get">
+                <div class="row">
+                    <!-- Search -->
+                    <div class="col-md-4 mb-3">
+                        <input type="text" class="form-control" name="searchTerm"
+                               placeholder="Search products..." value="@Model.SearchTerm">
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="col-md-3 mb-3">
+                        <select class="form-select" name="categoryId">
+                            <option value="">All Categories</option>
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <option value="@category.CategoryId"
+                                        selected="@(Model.CategoryId == category.CategoryId)">
+                                    @category.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="col-md-3 mb-3">
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="minPrice"
+                                   placeholder="Min price" value="@Model.MinPrice">
+                            <span class="input-group-text">to</span>
+                            <input type="number" class="form-control" name="maxPrice"
+                                   placeholder="Max price" value="@Model.MaxPrice">
+                        </div>
+                    </div>
+
+                    <!-- In Stock Toggle -->
+                    <div class="col-md-2 mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="inStock"
+                                   id="inStock" value="true"
+                                   checked="@(Model.InStock == true)">
+                            <label class="form-check-label" for="inStock">
+                                In Stock Only
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Sort Options -->
+                    <div class="col-md-4 mb-3">
+                        <select class="form-select" name="sortBy">
+                            <option value="name" selected="@(Model.SortBy == "name")">Name</option>
+                            <option value="price" selected="@(Model.SortBy == "price")">Price</option>
+                            <option value="date" selected="@(Model.SortBy == "date")">Newest</option>
+                        </select>
+                    </div>
+
+                    <!-- Sort Direction -->
+                    <div class="col-md-2 mb-3">
+                        <select class="form-select" name="sortAsc">
+                            <option value="true" selected="@(Model.SortAsc)">Ascending</option>
+                            <option value="false" selected="@(!Model.SortAsc)">Descending</option>
+                        </select>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="col-md-6 mb-3 text-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-funnel"></i> Apply Filters
+                        </button>
+                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Clear
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
 
     <div id="product-container" class="row">
         @foreach (var product in Model.Products)

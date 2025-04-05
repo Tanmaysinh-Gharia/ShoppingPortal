@@ -43,7 +43,7 @@ namespace ShoppingPortal.Data.Context
             modelBuilder.Entity<Order>().HasData(OrderSeedData.GetSeedOrders());
             modelBuilder.Entity<OrderItem>().HasData(OrderItemSeedData.GetSeedOrderItems());
             modelBuilder.Entity<OrderStatusLog>().HasData(OrderStatusLogSeedData.GetSeedOrderStatusLogs());
-
+            modelBuilder.Entity<ProductCategory>().HasData(ProductCategorySeedData.GetSeedProductCategories());
 
 
 
@@ -58,6 +58,7 @@ namespace ShoppingPortal.Data.Context
             modelBuilder.ApplyConfiguration(new OrderStatusLogConfiguration());
             modelBuilder.ApplyConfiguration(new ShoppingCartConfiguration());
             modelBuilder.ApplyConfiguration(new CartItemConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
         }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
