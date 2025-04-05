@@ -1,7 +1,4 @@
-﻿
-
-
-// Cart Operations
+﻿// Cart Operations
 function updateCartItem(productId, quantity) {
     $.post('/Cart/UpdateCartItem', { productId, quantity })
         .done(function (response) {

@@ -1,32 +1,36 @@
-﻿@using ShoppingPortal.Core.Constants
-@using ShoppingPortal.Web.Models
-@using ShoppingPortal.Core.DTOs
-@model ProductListViewModel
+﻿@using ShoppingPortal.Core.Models
+@model OrderListViewModel
+@using ShoppingPortal.Core.Enums
 @{
     ViewData["Title"] = "Order History";
+    var flow = "";
 }
 
-<div class="container">
-    <h2>Order history</h2>
+<div class="container py-4">
+    <h2 class="mb-4">Your Order History 
 
-    <div id="product-container" class="row">
-        @foreach (var product in Model.Products)
+    </h2>    
+    
+
+    <div id="orders-container">
+        @foreach (var order in Model.Orders)
         {
-            <partial name="_ProductCards" model="product" />
+            <partial name="_OrderCard" model="order" />
         }
     </div>
 
     @if (Model.PagingInfo.TotalPages > 1)
     {
-        <div class="text-center mt-3">
+        <div class="text-center mt-4">
             <button id="load-more" class="btn btn-primary"
                     data-current-page="1"
                     data-total-pages="@Model.PagingInfo.TotalPages">
-                Load More
+                Load More Orders
             </button>
         </div>
     }
 </div>
+
 @section Scripts {
-    <script src="~/js/order.js"></script>
+    <script src="~/js/orders.js"></script>
 }

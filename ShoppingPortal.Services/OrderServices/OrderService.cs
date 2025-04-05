@@ -1,11 +1,16 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using ShoppingPortal.Core.DTOs;
 using ShoppingPortal.Core.Enums;
 using ShoppingPortal.Core.Exceptions;
+using ShoppingPortal.Core.Helpers;
 using ShoppingPortal.Core.Interfaces;
+using ShoppingPortal.Core.Models;
 using ShoppingPortal.Data.Context;
 using ShoppingPortal.Data.Entities;
 using ShoppingPortal.Data.Interfaces;
+using ShoppingPortal.Data.Repositories;
+using ShoppingPortal.Core.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -122,6 +127,59 @@ namespace ShoppingPortal.Services.OrderServices
                 throw ex;
             }
         }
+
+
+
+        public async Task<OrderListViewModel> GetUserOrdersPaginatedAsync(Guid userId, int page, int pageSize)
+        {
+            var result = await _orderRepo.GetUserOrdersPaginatedAsync(userId, page, pageSize);
+
+            var orderDtos = result.Items.Select(o => new OrderDto
+            {
+                OrderId = o.OrderId,
+                CreatedAt = o.CreatedAt,
+                Status = o.Status,
+                TotalAmount = o.TotalAmount,
+                OrderItems = o.OrderItems?.Select(oi => new OrderItemDto
+                {
+                    ProductId = oi.ProductId,
+                    ProductName = oi.Product?.Name ?? "Unknown Product",
+                    Quantity = oi.Quantity,
+                    UnitPrice = oi.UnitPrice,
+                    Status = oi.Status
+                }).ToList() ?? new List<OrderItemDto>()
+            }).ToList();
+
+            return new OrderListViewModel
+            {
+                Orders = orderDtos,
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = result.PageNumber,
+                    ItemsPerPage = result.PageSize,
+                    TotalItems = result.TotalCount
+                }
+            };
+        }
+
+
+        public async Task<bool> CancelOrderAsync(Guid userId, Guid orderId)
+        {
+            // 1. Verify order exists and belongs to user
+            var order = await _orderRepo.GetOrderWithItemsAsync(orderId);
+            if (order == null || order.UserId != userId)
+                return false;
+
+            // 2. Check if order can be cancelled
+            if (order.Status != OrderStatusEnum.Pending)
+                return false;
+
+            // 3. Execute atomic transaction
+            return await _orderRepo.CancelOrderTransactionAsync(
+                orderId,
+                OrderStatusEnum.Cancelled);
+        }
+
 
 
     }

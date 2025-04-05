@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShoppingPortal.Core.Enums;
 
 namespace ShoppingPortal.Data.Entities
 {
@@ -28,6 +29,10 @@ namespace ShoppingPortal.Data.Entities
         [Column(TypeName = "decimal(10,2)")]
         public decimal UnitPrice { get; set; }
 
+
+        [Required]
+        [StringLength(20)]
+        public OrderStatusEnum Status { get; set; } = OrderStatusEnum.Pending;
         // Navigation properties
         public Order Order { get; set; }
         public Product Product { get; set; }

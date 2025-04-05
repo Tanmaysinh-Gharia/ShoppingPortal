@@ -27,7 +27,34 @@ namespace ShoppingPortal.Core.Extentions
             };
         }
 
+        public static string GetStatusColor(this OrderStatusEnum status)
+        {
+            return status switch
+            {
+                OrderStatusEnum.Pending => "#87CEEB",       // Skyblue
+                OrderStatusEnum.Accepted => "#FFA500",    // Orange
+                OrderStatusEnum.Shipped => "#4169E1",       // Royalblue
+                OrderStatusEnum.Delivered => "#32CD32",     // Limegreen
+                OrderStatusEnum.Cancelled => "#A9A9A9",     // Darkgray
+                OrderStatusEnum.Returned => "#FF6347", // Tomato
+                _ => "#FFFFFF"                              // Default white
+            };
+        }
+
+        public static string GetStatusBadgeClass(this OrderStatusEnum status)
+        {
+            return status switch
+            {
+                OrderStatusEnum.Pending => "bg-warning",
+                OrderStatusEnum.Accepted => "bg-info",
+                OrderStatusEnum.Shipped => "bg-primary",
+                OrderStatusEnum.Delivered => "bg-success",
+                OrderStatusEnum.Cancelled => "bg-secondary",
+                OrderStatusEnum.Returned=> "bg-danger",
+                _ => "bg-light"
+            };
+        }
         // Generic version using Description attribute if present
-        
+
     }
 }

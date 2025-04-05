@@ -11,7 +11,7 @@ namespace ShoppingPortal.Core.DTOs
     {
         public Guid OrderId { get; set; }
         public Guid UserId { get; set; }
-        public string Status { get; set; }
+        public OrderStatusEnum Status { get; set; }
         public decimal TotalAmount { get; set; }
         public string ShippingPostalCode { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -20,14 +20,14 @@ namespace ShoppingPortal.Core.DTOs
 
     public class OrderItemDto
     {
+        public Guid OrderItemId { get; set; }
         public Guid ProductId { get; set; }
         public string ProductName { get; set; }
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
-
         public OrderStatusEnum Status { get; set; }
-
-        public decimal TotalPrice => UnitPrice * Quantity;
+        public DateTime? StatusUpdatedAt { get; set; }
+        public string ImageUrl { get; set; }
     }
 
     public class OrderItemStatusDto

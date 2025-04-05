@@ -1,4 +1,5 @@
 ﻿using ShoppingPortal.Core.DTOs;
+using ShoppingPortal.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace ShoppingPortal.Core.Interfaces
         //async Task<bool> CancelOrderAsync(Guid orderId);
 
         //Task<List<OrderItemWithProduct>> GetOrderItemsWithStatusAsync(Guid orderId);
-        Task<List<OrderItemStatusDto>> GetOrderItemStatusesAsync(Guid userId, Guid orderId);
+        Task<OrderListViewModel> GetUserOrdersPaginatedAsync(Guid userId, int page, int pageSize);
+
+        Task<bool> CancelOrderAsync(Guid userId, Guid orderId);
     }
 }

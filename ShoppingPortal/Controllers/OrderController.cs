@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingPortal.Core.DTOs;
+using ShoppingPortal.Core.Models;
 using ShoppingPortal.Web.Models;
 namespace ShoppingPortal.Web.Controllers
 {
@@ -30,32 +31,15 @@ namespace ShoppingPortal.Web.Controllers
             return Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         }
 
+        // After Order : method
         [HttpGet]
         public async Task<IActionResult> Index(int page = 1, int pageSize = 8)
         {
             var userId = GetCurrentUserId();
-            var result = await _orderService.GetUserOrdersPaginatedAsync(userId, page, pageSize);
-
-            return View(new OrderListViewModel
-            {
-                Orders = result.Orders,
-                PagingInfo = result.PagingInfo
-            });
+            OrderListViewModel result = await _orderService.GetUserOrdersPaginatedAsync(userId, page, pageSize);
+            return View(result);
         }
-        // After Order : method
-        [HttpGet]
-        public async Task<IActionResult> Details(Guid orderId)
-        {
-            var userId = GetCurrentUserId();
-            var order = await _orderService.GetOrderDetailsAsync(userId, orderId);
-
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            return View(order);
-        }
+        
 
         [HttpPost]
         public async Task<IActionResult> CancelOrder(Guid orderId)
@@ -65,11 +49,16 @@ namespace ShoppingPortal.Web.Controllers
                 var userId = GetCurrentUserId();
                 var success = await _orderService.CancelOrderAsync(userId, orderId);
 
-                return Json(new { success });
+                return Json(new { 
+                    success,
+                    message = success ? "Order cancelled successfully" : "Failed to cancel order"
+                });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { success = false, message = ex.Message });
+                return BadRequest(new { 
+                    success = false, 
+                    message = ex.Message });
             }
         }
 

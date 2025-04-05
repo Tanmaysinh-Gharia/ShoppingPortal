@@ -30,6 +30,9 @@ namespace ShoppingPortal.Data.Entities
         [ForeignKey("ShippingAddress")]
         public string ShippingPostalCode { get; set; }
 
+
+
+
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
