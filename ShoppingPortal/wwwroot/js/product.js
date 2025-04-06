@@ -122,22 +122,46 @@ $(document).ready(function () {
 
     // Place order
     $(document).on('click', '.place-order', function () {
-        const productId = $(this).data('product-id');
-
         if (confirm('Are you sure you want to place an order for this item?')) {
-            $.post('/Cart/PlaceOrder', {
-                productId: productId
+
+
+            const productId = $(this).data('product-id');
+            const id = "inputVal-" + productId;
+            let val = $("#" + id).val();
+            if (val != null) {
+                window.location.href = "https://localhost:7158/Cart/Index";
+            }
+            val = 1;
+
+            const quantity = val; // Default quantity
+            const newQuantity = quantity;
+            if (newQuantity < 1 || newQuantity > 10) {
+                $(this).val($(this).data('prev-value') || 1);
+                return;
+            }
+            $.post('/Cart/AddToCart', {
+                ProductId: productId,
+                Quantity: newQuantity
             })
                 .done(function (response) {
                     if (response.success) {
-                        alert('Order placed successfully!');
-                        // Optionally redirect to orders page
-                        window.location.href = '/Orders';
+                        // Update UI
+                        showInCartControls(productId);
+                        const card = $(`[data-product-id="${productId}"]`).closest('.card');
+                        card.find('.cart-controls-in-cart').show();
+                        card.find('.cart-controls-not-in-cart').hide();
+                        card.find('.quantity-input').val(quantity);
+
+                        // Update cart count
+                        $('.cart-count').text(response.itemCount);
+                        window.location.href = "https://localhost:7158/Cart/Index";
                     }
                 })
                 .fail(function () {
-                    alert('Error placing order');
+                    alert('Error adding to cart');
                 });
+
+
         }
     });
 
